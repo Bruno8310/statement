@@ -1,22 +1,42 @@
 function statement(invoice, plays) {
   let totalAmount = 0;
   let volumeCredits = 0;
-  let result = `Statement for ${invoice.customer}\n`;
-
-  const format = formatNumber();
+  let orderContent = '';
+  // let result = `Statement for ${invoice.customer}\n`;
+  // const format = formatNumber();
 
   for (let perf of invoice.performances) {
     const play = plays[perf.playID];
+    let thisCredit = 0;
     let thisAmount = getAmountByMatchPlayType(perf.audience, play.type);
 
-    let thisCredit = 0;
     thisCredit += calculateVolumeCredits(perf.audience, play.type);
-    
 
-    result += ` ${play.name}: ${format(thisAmount / 100)} (${perf.audience} seats)\n`;
+    // result += ` ${play.name}: ${format(thisAmount / 100)} (${perf.audience} seats)\n`;
+    orderContent += inputResultFormatWithOneTxt(perf.audience, play.name, thisAmount);
+
     totalAmount += thisAmount;
     volumeCredits += thisCredit;
+
   }
+
+  let result = inputResultFormatWithAllTxt(invoice, totalAmount, volumeCredits, orderContent);
+
+  // result += `Amount owed is ${format(totalAmount / 100)}\n`;
+  // result += `You earned ${volumeCredits} credits \n`;
+
+  return result ;
+}
+
+function inputResultFormatWithOneTxt(audience, name, thisAmount) {
+  const format = formatNumber();
+  return ` ${name}: ${format(thisAmount / 100)} (${audience} seats)\n`;
+}
+
+function inputResultFormatWithAllTxt(invoice, totalAmount, volumeCredits, orderContent) {
+  const format = formatNumber();
+  let result = `Statement for ${invoice.customer}\n`;
+  result += orderContent;
   result += `Amount owed is ${format(totalAmount / 100)}\n`;
   result += `You earned ${volumeCredits} credits \n`;
   return result;
