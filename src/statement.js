@@ -9,21 +9,25 @@ function statement(invoice, plays) {
     const play = plays[perf.playID];
     let thisAmount = getAmountByMatchPlayType(perf.audience, play.type);
 
-    volumeCredits += Math.max(perf.audience - 30, 0);
-
-    if ('comedy' === play.type) volumeCredits += Math.floor(perf.audience / 5);
-
-
+    let thisCredit = 0;
+    thisCredit += calculateVolumeCredits(perf.audience, play.type);
     
-    result += `${play.name}: ${format(thisAmount / 100)} (${perf.audience} seats)\n`;
+
+    result += ` ${play.name}: ${format(thisAmount / 100)} (${perf.audience} seats)\n`;
     totalAmount += thisAmount;
+    volumeCredits += thisCredit;
   }
   result += `Amount owed is ${format(totalAmount / 100)}\n`;
   result += `You earned ${volumeCredits} credits \n`;
   return result;
 }
 
-
+function calculateVolumeCredits(audience, type) {
+  let volumeCredits = 0;
+  volumeCredits += Math.max(audience - 30, 0);
+  if ('comedy' === type) volumeCredits += Math.floor(audience / 5);
+  return volumeCredits
+}
 
 function formatNumber() {
   const format = new Intl.NumberFormat('en-US', {
