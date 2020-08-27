@@ -1,4 +1,4 @@
-function statement(invoice, plays) {
+function statementInputWithHtml(invoice, plays) {
   let totalAmount = 0;
   let volumeCredits = 0;
   let orderContent = '';
@@ -9,16 +9,46 @@ function statement(invoice, plays) {
     let thisAmount = getAmountByMatchPlayType(perf.audience, play.type);
 
     thisCredit += calculateVolumeCredits(perf.audience, play.type);
-
     orderContent += inputResultFormatWithOneTxt(perf.audience, play.name, thisAmount);
 
     totalAmount += thisAmount;
     volumeCredits += thisCredit;
 
   }
-
-  let result = inputResultFormatWithAllTxt(invoice, totalAmount, volumeCredits, orderContent);
+  let result = '';
+  result = inputResultFormatWithAllTxt(invoice, totalAmount, volumeCredits, orderContent);
   return result;
+}
+
+function statementInputWithTxt(invoice, plays) {
+  let totalAmount = 0;
+  let volumeCredits = 0;
+  let orderContent = '';
+
+  for (let perf of invoice.performances) {
+    const play = plays[perf.playID];
+    let thisCredit = 0;
+    let thisAmount = getAmountByMatchPlayType(perf.audience, play.type);
+
+    thisCredit += calculateVolumeCredits(perf.audience, play.type);
+    orderContent += inputResultFormatWithOneTxt(perf.audience, play.name, thisAmount);
+
+    totalAmount += thisAmount;
+    volumeCredits += thisCredit;
+
+  }
+  let result = '';
+  result = inputResultFormatWithAllTxt(invoice, totalAmount, volumeCredits, orderContent);
+  return result;
+}
+
+function inputResultFormatWithHtml() {
+
+}
+
+function inputResultFormatWithOnetHtml(audience, name, thisAmount) {
+  const format = formatNumber();
+  return `<tr><th>${name}</th><th>${format(thisAmount / 100)}</th><th>${audience}</th></tr>\n`;
 }
 
 function inputResultFormatWithOneTxt(audience, name, thisAmount) {
@@ -74,6 +104,7 @@ function getAmountByMatchPlayType(audience, type) {
 }
 
 module.exports = {
-  statement,
+  statementInputWithTxt,
   getAmountByMatchPlayType,
+  statementInputWithHtml
 };

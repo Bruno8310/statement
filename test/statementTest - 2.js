@@ -1,5 +1,6 @@
 const test = require('ava');
-const {statement} = require('../src/statement');
+const {  statementInputWithTxt,
+} = require('../src/statement');
 
 const plays = {
   'hamlet': {
@@ -22,7 +23,7 @@ test('statement case 1. Customer BigCo without performance. ', t => {
     'performances': [],
   };
 
-  const result = statement(invoice, plays);
+  const result = statementInputWithTxt(invoice, plays);
 
   t.is(result, 'Statement for BigCo\nAmount owed is $0.00\nYou earned 0 credits \n');
 });
@@ -38,7 +39,7 @@ test('statement case 2. Customer BigCo has one performance hamlet and the audien
     ],
   };
 
-  const result = statement(invoice, plays);
+  const result = statementInputWithTxt(invoice, plays);
 
   t.is(result, 'Statement for BigCo\n' +
     ' Hamlet: $400.00 (30 seats)\n' +
@@ -57,7 +58,7 @@ test('statement case 3. Customer BigCo has one performance hamlet and the audien
     ],
   };
 
-  const result = statement(invoice, plays);
+  const result = statementInputWithTxt(invoice, plays);
 
   t.is(result, 'Statement for BigCo\n' +
     ' Hamlet: $410.00 (31 seats)\n' +
@@ -76,7 +77,7 @@ test('statement case 4. Customer BigCo has one performance As You Like It and th
     ],
   };
 
-  const result = statement(invoice, plays);
+  const result = statementInputWithTxt(invoice, plays);
 
   t.is(result, 'Statement for BigCo2\n' +
     ' As You Like It: $360.00 (20 seats)\n' +
@@ -95,7 +96,7 @@ test('statement case 5. Customer BigCo has one performance As You Like It and th
     ],
   };
 
-  const result = statement(invoice, plays);
+  const result = statementInputWithTxt(invoice, plays);
 
   t.is(result, 'Statement for BigCo2\n' +
     ' As You Like It: $468.00 (21 seats)\n' +
@@ -126,7 +127,7 @@ test('statement case 6. Customer BigCo has three performances. ' +
     ],
   };
 
-  const result = statement(invoice, plays);
+  const result = statementInputWithTxt(invoice, plays);
 
   t.is(result, 'Statement for BigCo\n' +
     ' Hamlet: $650.00 (55 seats)\n' +
@@ -154,7 +155,7 @@ test('statement case 7. Customer BigCo has one unknown performance. ', t => {
   };
 
   try {
-    statement(invoice, plays);
+    statementInputWithTxt(invoice, plays);
     t.fail();
   }
   catch (e) {
