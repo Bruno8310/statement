@@ -9,14 +9,14 @@ function statementInputWithHtml(invoice, plays) {
     let thisAmount = getAmountByMatchPlayType(perf.audience, play.type);
 
     thisCredit += calculateVolumeCredits(perf.audience, play.type);
-    orderContent += inputResultFormatWithOneTxt(perf.audience, play.name, thisAmount);
+    orderContent += inputResultFormatWithOnetHtml(perf.audience, play.name, thisAmount);
 
     totalAmount += thisAmount;
     volumeCredits += thisCredit;
 
   }
   let result = '';
-  result = inputResultFormatWithAllTxt(invoice, totalAmount, volumeCredits, orderContent);
+  result = inputResultFormatWithAllHtml(invoice, totalAmount, volumeCredits, orderContent);
   return result;
 }
 
@@ -42,13 +42,21 @@ function statementInputWithTxt(invoice, plays) {
   return result;
 }
 
-function inputResultFormatWithHtml() {
+function inputResultFormatWithAllHtml(invoice, totalAmount, volumeCredits, orderContent) {
+  const format = formatNumber();
+  let result = `<h1>Statement for ${invoice.customer}</h1>\n`;
+  result += '<table>\n' +
+    '<tr><th>play</th><th>seats</th><th>cost</th></tr>';
+  result += orderContent;
+  result += '</table>\n' + `<p>Amount owed is <em>${format(totalAmount / 100)}</em></p>\n`;
+  result += `<p>You earned <em>${volumeCredits}</em> credits</p>\n`;
+  return result;
 
 }
 
 function inputResultFormatWithOnetHtml(audience, name, thisAmount) {
   const format = formatNumber();
-  return `<tr><th>${name}</th><th>${format(thisAmount / 100)}</th><th>${audience}</th></tr>\n`;
+  return ` <tr><td>${name}</td><td>${audience}</td><td>${format(thisAmount / 100)}</td></tr>\n`;
 }
 
 function inputResultFormatWithOneTxt(audience, name, thisAmount) {
